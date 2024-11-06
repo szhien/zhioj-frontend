@@ -22,7 +22,7 @@ export type OpenAPIConfig = {
 export const OpenAPI: OpenAPIConfig = {
   BASE: "http://localhost:8121",
   VERSION: "1.0",
-  WITH_CREDENTIALS: true, //请求是会携带cookie
+  WITH_CREDENTIALS: true, // 这个属性决定了是否在跨域请求中发送凭据（如 cookies、HTTP 认证信息等）。默认情况下，跨域请求不会发送凭据
   CREDENTIALS: "include",
   TOKEN: undefined,
   USERNAME: undefined,

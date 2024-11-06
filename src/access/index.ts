@@ -3,6 +3,12 @@ import router from "@/router";
 import store from "@/store";
 import checkAccess from "@/access/checkAccess";
 
+/**
+ * 路由守卫
+ * @param to
+ * @param from
+ * @param next
+ */
 router.beforeEach(async (to, from, next) => {
   console.log("登陆用户信息", store.state.user.loginUser);
   // 如果之前没登陆过，自动登录
