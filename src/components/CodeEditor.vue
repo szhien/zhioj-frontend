@@ -2,43 +2,60 @@
   <div
     id="code-editor"
     ref="codeEditorRef"
-    style="min-height: 400px; width: 100%"
+    style="min-height: 400px; height: 70vh; width: 100%"
   />
-  {{ props.value }}
+  <!--  {{ props.language }}-->
   <!--  <a-button @click="fillValue">填充值</a-button>-->
 </template>
 
 <script setup lang="ts">
 //引入Monaco编辑器，他需要挂载在一个节点上，需手动定义节点
 import * as monaco from "monaco-editor";
-import { defineProps, onMounted, ref, toRaw, withDefaults } from "vue";
+import { defineProps, onMounted, ref, toRaw, watch, withDefaults } from "vue";
 
 //通过ref获取元素节点，codeEditorRef表示的就是id为code-editor的DOM节点，这个DOM也是我们要挂载Monaco编辑器的节点
 const codeEditorRef = ref();
 const codeEditorInstance = ref();
 
-// const value = ref("hello world");
-
+/**
+ * Props接口定义了父组件传递给子组件的值
+ */
 interface Props {
-  value: string;
-  handleChange: (v: string) => void;
+  value: string; //代码
+  language: string; // 语言
+  handleChange: (code: string) => void;
 }
 
 //定义props(必须是这个名字)，用于接受父组件传递给子组件的值,设置默认值
 const props = withDefaults(defineProps<Props>(), {
-  value: () => "System.out.println('Hello Monaco!');",
-  handleChange: (v: string) => {
-    console.log(v);
+  value: "System.out.println('Hello Monaco!');",
+  language: "java",
+  handleChange: (code: string) => {
+    console.log("代码：" + code);
   },
 });
 
-const fillValue = () => {
-  if (!codeEditorInstance.value) {
-    return;
+// //填充值
+// const fillValue = () => {
+//   if (!codeEditorInstance.value) {
+//     return;
+//   }
+//   // 改变值
+//   toRaw(codeEditorInstance.value).setValue(props.value);
+// };
+
+// 更新编译器
+watch(
+  () => props.language,
+  () => {
+    console.log(monaco.languages.getLanguages());
+    monaco.editor.setModelLanguage(
+      // 踩坑一定要使用toRaw
+      toRaw(codeEditorInstance.value).getModel(),
+      props.language
+    );
   }
-  // 改变值
-  toRaw(codeEditorInstance.value).setValue("新的值");
-};
+);
 
 onMounted(() => {
   //确保该节点已经被加载了
@@ -47,9 +64,8 @@ onMounted(() => {
   }
   // 创建编辑器实例（编辑器是挂载在codeEditorRef.value节点上面的）
   codeEditorInstance.value = monaco.editor.create(codeEditorRef.value, {
-    // value: value.value, //显示的文本
     value: props.value, //显示的文本
-    language: "java", //语言
+    language: props.language, //语言
     automaticLayout: true, //自动布局
     folding: true, //是否折叠代码
     colorDecorators: true, //是否显示内联颜色
@@ -75,6 +91,7 @@ onMounted(() => {
   // 编辑 监听编辑器实例中value（代码）内容变化
   codeEditorInstance.value.onDidChangeModelContent(() => {
     console.log("目前内容为：", toRaw(codeEditorInstance.value).getValue());
+    props.handleChange(toRaw(codeEditorInstance.value).getValue());
   });
 });
 </script>

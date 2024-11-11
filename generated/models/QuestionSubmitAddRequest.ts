@@ -3,11 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 export type QuestionSubmitAddRequest = {
-    code?: string;
-    judgeInfo?: string;
-    language?: string;
-    questionId?: number;
-    status?: number;
-    userId?: number;
+  code?: string;
+  judgeInfo?: string;
+  language?: string;
+  questionId?: number;
+  status?: number;
+  userId?: number;
 };
-

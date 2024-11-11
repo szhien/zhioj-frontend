@@ -1,6 +1,6 @@
 <template>
   <MdEditor
-    :model-value="text"
+    :model-value="value"
     :toolbars="toolbars"
     :on-change="handleChange"
   />
@@ -47,13 +47,13 @@ const toolbars: ToolbarNames[] = [
 ];
 
 interface Props {
-  text: string;
+  value: string;
   handleChange: (v: string) => void;
 }
 
 //定义props(必须是这个名字)，用于接受父组件传递给子组件的值，可以设置默认值
 const props = withDefaults(defineProps<Props>(), {
-  text: () => "# Hello Editor",
+  value: () => "# Hello Editor",
   handleChange: (v: string) => {
     console.log(v);
   },

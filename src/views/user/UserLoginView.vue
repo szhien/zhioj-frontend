@@ -64,7 +64,7 @@ const handleSubmit = async () => {
       path: "/",
       replace: true, // replace: true 表示替换当前的历史记录，而不是添加新的历史记录，即跳转到首页后点击回到上一页不会再次来到登录页
     });
-    message.success("登录成功，" + JSON.stringify(res.data));
+    message.success("登录成功，欢迎" + JSON.stringify(res.data.userName));
   } else {
     message.error("登录失败，" + res.message);
   }

@@ -9,10 +9,10 @@
         <a-input-tag v-model="form.tags" placeholder="请选择标签" allow-clear />
       </a-form-item>
       <a-form-item field="content" label="题目内容">
-        <MdEditor :text="form.content" :handle-change="onContentChange" />
+        <MdEditor :value="form.content" :handle-change="onContentChange" />
       </a-form-item>
       <a-form-item field="answer" label="答案">
-        <CodeEditor :value="form.answer" :handle-change="onAnswerChange" />
+        <MdEditor :value="form.answer" :handle-change="onAnswerChange" />
       </a-form-item>
       <a-form-item label="判题配置" :content-flex="false" :merge-props="false">
         <a-space direction="vertical" style="min-width: 480px">
@@ -98,14 +98,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, toRaw } from "vue";
 import MdEditor from "@/components/MdEditor.vue";
 import { QuestionControllerService } from "../../../generated";
 import message from "@arco-design/web-vue/es/message";
 import { useRoute } from "vue-router";
-import CodeEditor from "@/components/CodeEditor.vue";
 
 const route = useRoute();
+
 // 如果页面地址包含 update，视为更新页面
 const updatePage = route.path.includes("update");
 const minValue = ref(0);
@@ -135,11 +135,12 @@ const loadData = async () => {
   if (!id) {
     return;
   }
-  const res = await QuestionControllerService.getQuestionVoByIdUsingGet(
+  const res = await QuestionControllerService.getQuestionByIdUsingGet(
     id as any
   );
   if (res.code === 0) {
     form.value = res.data as any;
+    console.log("加载数据：" + form.value.answer);
     // json 转 js 对象
     if (!form.value.judgeCase) {
       form.value.judgeCase = [
@@ -175,7 +176,7 @@ onMounted(() => {
 });
 
 const doSubmit = async () => {
-  console.log(form.value);
+  console.log("是更新否：" + updatePage);
   // 区分更新还是创建
   if (updatePage) {
     const res = await QuestionControllerService.updateQuestionUsingPost(

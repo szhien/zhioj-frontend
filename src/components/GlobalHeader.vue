@@ -23,8 +23,12 @@
         </a-menu-item>
       </a-menu>
     </a-col>
-    <a-col flex="100px">
-      <div>{{ store.state.user?.loginUser.userName }}</div>
+    <a-col flex="200px">
+      <a-space>
+        <a-avatar :size="40" :src="store.state.user?.loginUser.avatar" />
+        <div>{{ store.state.user?.loginUser.userName }}</div>
+        <a-button>退出</a-button>
+      </a-space>
     </a-col>
   </a-row>
 </template>
@@ -52,7 +56,7 @@ const visibleRoutes = computed(() => {
     //如果菜单要隐藏，根据用户的权限过滤菜单，用户的权限满足菜单的要求才显示
     return checkAccess(
       store.state.user?.loginUser, //不要将其作为变量提出去，就是说不要用 const loginUser = store.state.user?.loginUser;，因为它是响应式的，会实时更新
-      item?.meta?.access as string
+      item?.meta?.access as string[]
     );
   });
   //根据用户权限过滤路由
