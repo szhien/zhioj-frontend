@@ -11,6 +11,7 @@ import AddQuestionView from "@/views/question/AddQuestionView.vue";
 import ManageQuestionView from "@/views/question/ManageQuestionView.vue";
 import QuestionsView from "@/views/question/QuestionsView.vue";
 import ViewQuestionView from "@/views/question/ViewQuestionView.vue";
+import QuestionsSubmitView from "@/views/question/QuestionsSubmitView.vue";
 
 export const routes: Array<RouteRecordRaw> = [
   {
@@ -79,7 +80,7 @@ export const routes: Array<RouteRecordRaw> = [
     component: AddQuestionView,
     meta: {
       isHide: true,
-      access: [ACCESS_ENUM.ADMIN],
+      // access: [ACCESS_ENUM.ADMIN],
     },
   },
   {
@@ -91,14 +92,24 @@ export const routes: Array<RouteRecordRaw> = [
       isHide: true,
     },
   },
+  // {
+  //   path: "/admin",
+  //   name: "题目模块",
+  //   component: AdminView,
+  //   meta: {
+  //     //admin的时候不隐藏,access 不填时默认直接隐藏
+  //     isHide: false,
+  //     // access: [ACCESS_ENUM.ADMIN],
+  //   },
+  // },
   {
-    path: "/admin",
-    name: "题目模块",
-    component: AdminView,
+    path: "/question/submit",
+    name: "题目提交信息",
+    component: QuestionsSubmitView,
     meta: {
       //admin的时候不隐藏,access 不填时默认直接隐藏
-      isHide: true,
-      access: [ACCESS_ENUM.ADMIN],
+      isHide: false,
+      // access: [ACCESS_ENUM.ADMIN],
     },
   },
   {

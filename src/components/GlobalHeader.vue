@@ -27,7 +27,9 @@
       <a-space>
         <a-avatar :size="40" :src="store.state.user?.loginUser.avatar" />
         <div>{{ store.state.user?.loginUser.userName }}</div>
-        <a-button>退出</a-button>
+        <a-button type="primary" html-type="submit" @click="logout"
+          >退出
+        </a-button>
       </a-space>
     </a-col>
   </a-row>
@@ -39,6 +41,8 @@ import { RouteRecordRaw, useRouter } from "vue-router";
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import checkAccess from "@/access/checkAccess";
+import { UserControllerService } from "../../generated";
+import message from "@arco-design/web-vue/es/message";
 
 const router = useRouter();
 const store = useStore();
@@ -88,6 +92,22 @@ const doMenuClick = (key: string) => {
   router.push({
     path: key,
   });
+};
+
+// 退出登录
+const logout = async () => {
+  const res = await UserControllerService.userLogoutUsingPost();
+  if (res.code === 0) {
+    //获取最新的登录用户的信息，保存到了store中
+    await store.dispatch("user/getLoginUser");
+    await router.push({
+      path: "/user/login",
+      replace: true,
+    });
+    message.success("退出登录，请重新登录！");
+  } else {
+    message.error(res.message);
+  }
 };
 </script>
 
